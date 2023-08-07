@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloader YouTube Thumbnail</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=512&id=43996&format=png" type="image/x-icon">
+</head>
+<body>
+    <form>
+        <header>Baixar Thumbnail</header>
+        <div class="url-input">
+            <span class="title">Cole a url do video</span>
+            <div class="field">
+                <input type="text" id="urlInput" placeholder="Url" required>
+                <div class="bottom-line"></div>
+            </div>
+        </div>
+        <div class="preview-area">
+            <img class="thumbnail" src="" alt="thumbnail">
+            <i class="icon fas fa-cloud-download-alt"></i>
+            <span>Cole a url pra ver a preview</span>
+        </div>
+        <button class="download-btn" type="button" onclick="downloadThumbnail()">Baixar Thumbnail</button>
+    </form>
+
+    <script>
+        const urlField = document.getElementById("urlInput"),
+              previewArea = document.querySelector(".preview-area"),
+              imgTag = previewArea.querySelector(".thumbnail");
+
+        urlField.onkeyup = () => {
+            let imgUrl = urlField.value;
+            previewArea.classList.add("active");
+
+            if (imgUrl.indexOf("https://www.youtube.com/watch?v=") !== -1) {
+                console.log(1);
+                let vidId = imgUrl.split("v=")[1].substring(0, 11);
+                let ytThumbUrl = `https://img.youtube.com/vi/${vidId}/maxresdefault.jpg`;
+                imgTag.src = ytThumbUrl;
+
+            } else if (imgUrl.indexOf("https://youtu.be/") !== -1) {
+                console.log(2);
+                let vidId = imgUrl.split("be/")[1].substring(0, 11);
+                console.log(vidId);
+                let ytThumbUrl = `https://img.youtube.com/vi/${vidId}/maxresdefault.jpg`;
+                imgTag.src = ytThumbUrl;
+
+            } else if (imgUrl.match(/\.(jpe?g|png|gif|bpm|webp)$/i)) {
+                imgTag.src = imgUrl;
+
+            } else {
+                imgTag.src = "";
+                previewArea.classList.remove("active");
+            }
+        };
+
+        function downloadThumbnail() {
+            const imgUrl = imgTag.src;
+            if (imgUrl) {
+                const link = document.createElement('a');
+                link.href = imgUrl;
+                link.download = 'thumbnail.jpg';
+                link.target = '_blank';
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>
